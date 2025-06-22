@@ -1,0 +1,38 @@
+rust_cli_task 
+
+rust_cli_task memeber_name 
+
+memeber_name = ["barroom04”, “orzklv”, “shakhzod”, “domirando”, “let_rec”];
+
+Bahrom04 = [“oʻzbekchasi yoʻq ekan”, “asahi oʻrnatsammikan?”, “sops ishlamayapti!”]
+
+Orzklv = ["cooked”, “koʻkaldosh”, “moralno tayyor turiylar”]
+
+shakhzod = ["mazzami”]
+
+Domirando = ["menga vim qulay"]
+
+let_rec = ["yeess"]
+
+
+ "bahrom04" => {
+            let quotes = vec!["oʻzbekchasi yoʻq ekan", "asahi oʻrnatsammikan?", "sops ishlamayapti!"];
+            println!("bahrom04 says this quotes: {:?}", quotes.choose(&mut rand::rng()).unwrap());
+        },
+        "orzklv" => {
+            let quotes = vec!["cooked", "koʻkaldosh", "moralno tayyor turiylar"];
+            println!("orzklv says this quotes: {:?}", quotes.choose(&mut rand::rng()).unwrap());
+        },
+        "shakhzod" => {
+            let quotes = vec!["mazzami", "qoʻpol qilib aytganda…"];
+            println!("Shakhzod Kudratov says this quotes: {:?}", quotes.choose(&mut rand::rng()).unwrap());
+        },
+        "others" => {
+            let quotes = vec!["menga vim qulay", "yeess", "kim korzinkaga chiqadi?", "tahoratiz bormi?", "10 ta arch linux davay", "shundoq o'tib olay"];
+            println!("Some other members says this quotes: {:?}", quotes.choose(&mut rand::rng()).unwrap());
+        },
+        _ => {
+            println!("no author spesified");
+        }
+
+
