@@ -42,7 +42,7 @@ fn main() {
             println!("{:?} says this quotes: {:?}\n", author_struct.author, author_struct.quotes.choose(&mut rand::rng()).unwrap());
         },
         None => {
-            println!("No aviable author spesified! ---");
+            println!("No aviable author spesified!");
         }
         
     }   
