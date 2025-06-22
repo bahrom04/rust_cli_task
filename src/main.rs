@@ -39,7 +39,7 @@ fn main() {
     
     match Quote::get_quote(args.author) {
         Some(author_struct) => {
-            println!("{:?} says this quotes: {:?}", author_struct.author, author_struct.quotes.choose(&mut rand::rng()).unwrap());
+            println!("{:?} says this quotes: {:?}\n", author_struct.author, author_struct.quotes.choose(&mut rand::rng()).unwrap());
         },
         None => {
             println!("No aviable author spesified! ---");
