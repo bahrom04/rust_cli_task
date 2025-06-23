@@ -9,7 +9,7 @@ in
     src = pkgs.lib.cleanSource ./.;
     cargoLock.lockFile = ./Cargo.lock;
 
-    postInstall = (previousAttrs.postInstall or "") + ''
+    postInstall = (pkgs.previousAttrs.postInstall or "") + ''
     ./quotes.json
     '';
     # Tests require network access. Skipping.
