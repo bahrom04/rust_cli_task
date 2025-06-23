@@ -3,7 +3,7 @@ use serde::Deserialize;
 use rand::seq::IndexedRandom;
 
 use std::fs::File;
-// use std::path::Path;
+use std::path::Path;
 use std::env;
 
 
@@ -23,11 +23,14 @@ struct Quote {
 
 impl Quote {
     fn get_quote(target_author: String) -> Option<Quote> {
-        // let json_file_path = Path::new("./quotes.json");
-        let json_file_path = env::var("QUOTES_PATH").unwrap();
-        let file = File::open(&json_file_path).expect("Failed to open file");
+        let mut exe_path = env::current_exe().expect("Failed to get path to current executable");
+        exe_path.pop();
+        exe_path.push("../share/quotes.json");
+        let json_file_path = Path::new(&exe_path);
+        // let json_file_path = env::var("QUOTES_PATH").unwrap(); a
+        let file = File::open(json_file_path).expect("Failed to open file");
         println!("+++++++++++++++++++++++++++++++++++++++");
-        println!("file path: {:?}", json_file_path);
+        println!("file path: {:?}", &exe_path);
         println!("file it self: {:?}", file);
         println!("+++++++++++++++++++++++++++++++++++++++");
         
