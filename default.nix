@@ -10,7 +10,7 @@ in
     cargoLock.lockFile = ./Cargo.lock;
 
     postInstall = (pkgs.previousAttrs.postInstall or "") + ''
-    sudo cp ./quotes.json ./$out/
+    cp ./quotes.json ./$out/
     '';
     # Tests require network access. Skipping.
     doCheck = false;
