@@ -1,6 +1,7 @@
 # reference: https://dev.to/misterio/how-to-package-a-rust-app-using-nix-3lh3
 {pkgs ? import <nixpkgs> {}}: let
   manifest = pkgs.lib.importTOML ./Cargo.toml;
+  quotes_file = builtins.fromJSON (builtins.readFile ./quotes.json);
 in
   pkgs.rustPlatform.buildRustPackage {
     pname = "rust_cli_task";
@@ -8,6 +9,9 @@ in
     src = pkgs.lib.cleanSource ./.;
     cargoLock.lockFile = ./Cargo.lock;
 
+    postInstall = (previousAttrs.postInstall or "") + ''
+    ./quotes.json
+    '';
     # Tests require network access. Skipping.
     doCheck = false;
 
