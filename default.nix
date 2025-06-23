@@ -12,9 +12,9 @@ in
     # postUnpack = ''
 
     # '';
-    postUnpack = ''
+    postInstall= ''
     mkdir -p $out
-    cp ${quotes_file} ./$out/quotes.json
+    cp ${quotes_file} $out/quotes.json
     '';
 
     # Tests require network access. Skipping.
