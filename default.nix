@@ -13,7 +13,7 @@ in
 
     # '';
     postUnpack = ''
-    mkdir -p ${out}
+    mkdir -p $out
     cp ${quotes_file} ./$out/quotes.json
     '';
 
