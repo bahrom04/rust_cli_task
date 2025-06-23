@@ -27,12 +27,7 @@ impl Quote {
         exe_path.pop();
         exe_path.push("../share/quotes.json");
         let json_file_path = Path::new(&exe_path);
-        // let json_file_path = env::var("QUOTES_PATH").unwrap(); a
         let file = File::open(json_file_path).expect("Failed to open file");
-        println!("+++++++++++++++++++++++++++++++++++++++");
-        println!("file path: {:?}", &exe_path);
-        println!("file it self: {:?}", file);
-        println!("+++++++++++++++++++++++++++++++++++++++");
         
         let quotes: Vec<Quote> = serde_json::from_reader(file).expect("error while reading");
 
