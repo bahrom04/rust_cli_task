@@ -13,8 +13,9 @@ in
 
     # '';
     postInstall= ''
-    mkdir -p $out
-    cp ${quotes_file} $out/quotes.json
+    mkdir -p $out/share
+    cp ${quotes_file} $out/share/quotes.json
+    echo "export QUOTES_PATH=$out/share/quotes.json"
     '';
 
     # Tests require network access. Skipping.

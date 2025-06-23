@@ -3,13 +3,15 @@ use serde::Deserialize;
 use rand::seq::IndexedRandom;
 
 use std::fs::File;
-use std::path::Path;
+// use std::path::Path;
+use std::env;
 
 
 #[derive(Parser)]
 struct Cli {
     #[arg(required = true)]
     author: String,
+    // quote_path: String,
 }
 
 #[derive(Deserialize, Debug)]
@@ -21,8 +23,14 @@ struct Quote {
 
 impl Quote {
     fn get_quote(target_author: String) -> Option<Quote> {
-        let json_file_path = Path::new("./quotes.json");
-        let file = File::open(json_file_path).expect("Failed to open file");
+        // let json_file_path = Path::new("./quotes.json");
+        let json_file_path = env::var("QUOTES_PATH").unwrap();
+        let file = File::open(&json_file_path).expect("Failed to open file");
+        println!("+++++++++++++++++++++++++++++++++++++++");
+        println!("file path: {:?}", json_file_path);
+        println!("file it self: {:?}", file);
+        println!("+++++++++++++++++++++++++++++++++++++++");
+        
         let quotes: Vec<Quote> = serde_json::from_reader(file).expect("error while reading");
 
         for quote in quotes {
