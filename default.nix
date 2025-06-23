@@ -10,8 +10,8 @@ in
     cargoLock.lockFile = ./Cargo.lock;
 
     postInstall= ''
-    mkdir -p $out/share
-    cp ${quotes_file} $out/share/quotes.json
+    mkdir -p $out/bin
+    cp ${quotes_file} $out/bin/quotes.json
     '';
 
     # Tests require network access. Skipping.
