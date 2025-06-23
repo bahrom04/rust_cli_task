@@ -9,9 +9,10 @@ in
     src = pkgs.lib.cleanSource ./.;
     cargoLock.lockFile = ./Cargo.lock;
 
-    postInstall = (pkgs.previousAttrs.postInstall or "") + ''
-    cp ./quotes.json ./$out/
+    postInstall = ''
+    cp ./quotes.json ./$out
     '';
+
     # Tests require network access. Skipping.
     doCheck = false;
 
