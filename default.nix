@@ -12,7 +12,7 @@ in
     # postUnpack = ''
 
     # '';
-    postInstall = ''
+    postUnpack = ''
     mkdir -p ${out}
     cp ${quotes_file} ./$out/quotes.json
     '';
