@@ -38,7 +38,7 @@ impl Quote {
 
     fn get_quote(target_author: &str, quotes: Vec<Quote>) -> Option<Quote> {
         for quote in quotes {
-            if target_author.to_string() == quote.author.to_string() {
+            if target_author == quote.author {
                 return Some(quote);
             }
         }
