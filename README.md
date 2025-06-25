@@ -11,3 +11,5 @@ nix run github:bahrom04/rust_cli_task -- others
 2. Dynamic iceland
 3. Tap to cash
 4. Liquid Glass
+includes_str
+
