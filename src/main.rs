@@ -20,18 +20,18 @@ struct Quote {
 }
 
 impl Quote {
-    fn new(author: String, quotes: Vec<String>) -> Self {
-        Self {
-            author, quotes
-        }
-    }
+    // fn new(author: String, quotes: Vec<String>) -> Self {
+    //     Self {
+    //         author, quotes
+    //     }
+    // }
 
     fn read_json(path: PathBuf) -> Result<Vec<Quote>, CustomError> {
-        let mut exe_path = env::current_exe()?;
+        let mut exe_path: PathBuf = env::current_exe()?;
         exe_path.pop();
         exe_path.push(path);
         // let json_file_path = Path::new(&exe_path);
-        let json_file_path = exe_path.clone();
+        let json_file_path: PathBuf = exe_path.clone();
 
         if !json_file_path.exists() {
             return Err(CustomError::JsonNotFoundError(json_file_path));
@@ -43,22 +43,20 @@ impl Quote {
         Ok(quotes)
     }
 
-    fn get_quote(&self, selector: usize) -> Option<String> {
-        
-        if selector > self.quotes.len() {
-            return None;
+    fn get_quote(target_quote: &str, quotes: Vec<Quote>) -> Option<Quote> {
+        for quote in quotes {
+            if target_quote == quote.author {
+                return Some(quote);
+            }
         }
-
-        Some(
-            self.quotes.get(selector)
-        )
+        None
     }
 }
 
 fn main() {
-    let args = Cli::parse();
-    let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    path.push("./quotes.json");
+    let args: Cli = Cli::parse();
+    let mut path: PathBuf = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    path.push("./data/quotes.json");
 
     match Quote::read_json(path) {
         Ok(quotes) => {
@@ -84,9 +82,9 @@ mod test {
 
     #[test]
     fn read_json_method(){
-        let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        path.push("./test.json");
-        let quotes = Quote::read_json(path).unwrap();
+        let mut path: PathBuf = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        path.push("./data/test.json");
+        let quotes: Vec<Quote> = Quote::read_json(path).unwrap();
 
         let test_quote_data_1: Quote = Quote{
             author: "bahrom04".to_string(), 

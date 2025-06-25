@@ -1,7 +1,8 @@
 # reference: https://dev.to/misterio/how-to-package-a-rust-app-using-nix-3lh3
 {pkgs ? import <nixpkgs> {}}: let
   manifest = pkgs.lib.importTOML ./Cargo.toml;
-  quotes_file = ./quotes.json;
+  quotes_file = ./data/quotes.json;
+  test_quotes_file = ./data/test.json;
 in
   pkgs.rustPlatform.buildRustPackage {
     pname = "rust_cli_task";
@@ -12,10 +13,11 @@ in
     postInstall= ''
     mkdir -p $out/bin
     cp ${quotes_file} $out/bin/quotes.json
+    cp ${test_quotes_file} $out/bin/test.json
     '';
 
     # Tests require network access. Skipping.
-    doCheck = false;
+    doCheck = true;
 
     meta = {
       description = "Fast line-oriented regex search tool, similar to ag and ack";
