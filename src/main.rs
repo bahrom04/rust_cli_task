@@ -8,10 +8,8 @@ use clap::Parser;
 use serde::Deserialize;
 use serde;
 use rand::seq::IndexedRandom;
-use std::env;
-use std::fs::File;
-use std::path::PathBuf;
 
+static BINARY_DATA: &str = include_str!("../data/quotes.json");
 
 #[derive(Deserialize, Debug, PartialEq)]
 struct Quote {
@@ -26,20 +24,9 @@ impl Quote {
     //     }
     // }
 
-    fn read_json(path: PathBuf) -> Result<Vec<Quote>, CustomError> {
-        let mut exe_path: PathBuf = env::current_exe()?;
-        exe_path.pop();
-        exe_path.push(path);
-        // let json_file_path = Path::new(&exe_path);
-        let json_file_path: PathBuf = exe_path.clone();
-
-        if !json_file_path.exists() {
-            return Err(CustomError::JsonNotFoundError(json_file_path));
-        }
-
-        let file = File::open(json_file_path)?;
-        let quotes: Vec<Quote> = serde_json::from_reader(file)?;
-
+    fn read_json(path: &str) -> Result<Vec<Quote>, CustomError> {
+        let quotes: Vec<Quote> = serde_json::from_str(path)?;
+        
         Ok(quotes)
     }
 
@@ -55,10 +42,8 @@ impl Quote {
 
 fn main() {
     let args: Cli = Cli::parse();
-    let mut path: PathBuf = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    path.push("./data/quotes.json");
 
-    match Quote::read_json(path) {
+    match Quote::read_json(BINARY_DATA) {
         Ok(quotes) => {
             match Quote::get_quote(&args.author, quotes) {
                 Some(quote) => {
@@ -79,12 +64,11 @@ fn main() {
 #[cfg(test)]
 mod test {
     use super::*;
-
+    static BINARY_TEST_DATA: &str = include_str!("../data/test.json");
+    
     #[test]
-    fn read_json_method(){
-        let mut path: PathBuf = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        path.push("./data/test.json");
-        let quotes: Vec<Quote> = Quote::read_json(path).unwrap();
+    fn read_json_method(){        
+        let quotes: Vec<Quote> = Quote::read_json(BINARY_TEST_DATA).unwrap();
 
         let test_quote_data_1: Quote = Quote{
             author: "bahrom04".to_string(), 
