@@ -1,13 +1,11 @@
-use crate::Quote;
-
-#[cfg(test)]
-
-use super::*;
-static BINARY_TEST_DATA: &str = include_str!("../data/test.json");
-
 #[test]
-fn from_json_method(){        
-    let quotes: Vec<Quote> = Quote::from_json(BINARY_TEST_DATA).unwrap();
+fn from_json_method(){    
+    use crate::Quote;
+
+    let quote = Quote::new();
+    static BINARY_TEST_DATA: &str = include_str!("../data/test.json");
+    
+    let quotes: Vec<Quote> = quote.from_json(BINARY_TEST_DATA).unwrap();
 
     let test_quote_data_1: Quote = Quote{
         author: "bahrom04".to_string(), 
