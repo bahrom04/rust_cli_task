@@ -10,6 +10,11 @@ in
     src = pkgs.lib.cleanSource ./.;
     cargoLock.lockFile = ./Cargo.lock;
 
+    postInstall = ''
+      mkdir -p $out/data
+      cp ${quotes_file} $out/data/quotes.json
+      cp ${test_quotes_file} $out/data/test.json
+    '';
     # Tests require network access. Skipping.
     doCheck = true;
 

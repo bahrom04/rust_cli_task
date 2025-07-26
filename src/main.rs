@@ -43,43 +43,43 @@ fn main() {
     let args: Cli = Cli::parse();
     let quote: Quote = Quote::new();
 
-    let () = quote
-        .from_json(BINARY_DATA)
-        .map_or_else(
-            |err| {
-                println!("{}", err);
-                None
-            },
-            |quotes| quote.get_quote(&args.author, quotes),
-        )
-        .map_or_else(
-            || {
-                println!("todo not found quote error");
-            },
-            |op| {
-                println!(
-                    "{:?} says this quotes: {:?}\n",
-                    op.author,
-                    op.quotes.choose(&mut rand::rng()).unwrap()
-                );
-            },
-        );
-
-    // match quote.from_json(BINARY_DATA) {
-    //     Ok(quotes) => match quote.get_quote(&args.author, quotes) {
-    //         Some(quote) => {
+    // let () = quote
+    //     .from_json(BINARY_DATA)
+    //     .map_or_else(
+    //         |err| {
+    //             println!("{}", err);
+    //             None
+    //         },
+    //         |quotes| quote.get_quote(&args.author, quotes),
+    //     )
+    //     .map_or_else(
+    //         || {
+    //             println!("todo not found quote error");
+    //         },
+    //         |op| {
     //             println!(
     //                 "{:?} says this quotes: {:?}\n",
-    //                 quote.author,
-    //                 quote.quotes.choose(&mut rand::rng()).unwrap()
+    //                 op.author,
+    //                 op.quotes.choose(&mut rand::rng()).unwrap()
     //             );
-    //         }
-    //         None => {
-    //             println!("todo not found quote error");
-    //         }
-    //     },
-    //     Err(e) => {
-    //         println!("{}", e);
-    //     }
-    // }
+    //         },
+    //     );
+
+    match quote.from_json(BINARY_DATA) {
+        Ok(quotes) => match quote.get_quote(&args.author, quotes) {
+            Some(quote) => {
+                println!(
+                    "{:?} says this quotes: {:?}\n",
+                    quote.author,
+                    quote.quotes.choose(&mut rand::rng()).unwrap()
+                );
+            }
+            None => {
+                println!("todo not found quote error");
+            }
+        },
+        Err(e) => {
+            println!("{}", e);
+        }
+    }
 }
