@@ -1,33 +1,70 @@
-{pkgs ? import <nixpkgs> {}}:
-pkgs.stdenv.mkDerivation {
-  name = "name";
-  nativeBuildInputs = with pkgs; [
-    # You guess what it is
-    pkg-config
-    gcc
-    clippy
+# Either have nixpkgs and fenix in your channels
+# Or build it using flakes, flake way is more recommended!
+{
+  pkgs ? import <nixpkgs> {},
+  fenix ? import <fenix> {},
+}: let
+  # Helpful nix function
+  getLibFolder = pkg: "${pkg}/lib";
 
-    # Nix
-    nixd
-    nixpkgs-fmt
-    nixpkgs-lint
+  # Rust Toolchain via fenix
+  toolchain = fenix.packages.${pkgs.system}.fromToolchainFile {
+    file = ./rust-toolchain.toml;
 
-    # Rust
-    rustc
-    cargo
-    rustfmt
-    rust-analyzer # LSP Server
-  ];
+    # Don't worry, if you need sha256 of your toolchain,
+    # just run `nix build` and copy paste correct sha256.
+    sha256 = "sha256-0Hcko7V5MUtH1RqrOyKQLg0ITjJjtyRPl2P+cJ1p1cY=";
+  };
+in
+  pkgs.stdenv.mkDerivation {
+    name = "template-dev";
 
-  buildInputs = with pkgs; [
-    clang
-    openssl
-    llvmPackages.bintools
-  ];
+    # Compile time dependencies
+    nativeBuildInputs = with pkgs; [
+      # GCC toolchain
+      gcc
+      gnumake
+      pkg-config
 
-  RUST_BACKTRACE = 1;
-  RUSTC_VERSION = builtins.readFile ./rust-toolchain.toml;
-  RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
-  # LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (buildInputs ++ nativeBuildInputs);
-  LIBCLANG_PATH = pkgs.lib.makeLibraryPath [pkgs.llvmPackages_latest.libclang.lib];
-}
+      # LLVM toolchain
+      cmake
+      llvmPackages.llvm
+      llvmPackages.clang
+
+      # Hail the Nix
+      nixd
+      statix
+      deadnix
+      alejandra
+
+      # Rust
+      toolchain
+      cargo-watch
+
+      # Other compile time dependencies
+      # here
+    ];
+
+    # Runtime dependencies which will be shipped
+    # with nix package
+    buildInputs = with pkgs; [
+      # openssl
+      # libressl
+    ];
+
+    # Set Environment Variables
+    RUST_BACKTRACE = "full";
+
+    # Compiler LD variables
+    # > Make sure packages have /lib or /include path'es
+    NIX_LDFLAGS = "-L${(getLibFolder pkgs.libiconv)}";
+    LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
+      pkgs.gcc
+      pkgs.libiconv
+      pkgs.llvmPackages.llvm
+    ];
+
+    shellHook = ''
+      # Extra steps
+    '';
+  }
